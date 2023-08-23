@@ -10,6 +10,10 @@ pub trait FileWrite {
     fn write(&self, path: &Path, content: &str) -> Result<()>;
 }
 
+pub trait Env {
+    fn env(&self, key: &str) -> Result<String>;
+}
+
 // more commonly a logging capability
 pub trait Print {
     fn print(&self, s: &str);

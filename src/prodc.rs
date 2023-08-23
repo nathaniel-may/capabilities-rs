@@ -23,6 +23,15 @@ impl FileWrite for Prod {
     }
 }
 
+impl Env for Prod {
+    fn env(&self, key: &str) -> Result<String> {
+        std::env::var(key).map_err(|e| MissingEnvVar {
+            source: Some(e),
+            key: key.to_string(),
+        })
+    }
+}
+
 impl Print for Prod {
     fn print(&self, s: &str) {
         print!("{}", s)
