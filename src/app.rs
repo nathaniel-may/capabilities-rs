@@ -1,3 +1,6 @@
+//! this is the true root of the program.
+//! this example reads from a file, logs the contents, and updates a counter
+//! file to indicate another file was read.
 mod capabilities;
 mod error;
 pub mod prodc;
@@ -8,7 +11,7 @@ use crate::error::Error::*;
 use crate::error::Result;
 use std::path::Path;
 
-/// top-level entry point to the program.
+/// root-level entry point to the program.
 /// Both main and tests can call here for the full application.
 pub fn run<W: Env + ReadFiles + WriteFiles + Logging>(world: &mut W) -> Result<()> {
     let read_path = world.env("READ_FILE")?;

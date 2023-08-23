@@ -1,4 +1,4 @@
-//! main creates the value that represents the world
+//! main shouldn't do anything more than handle the final result value and exit.
 use app::prodc::Prod;
 use std::process::ExitCode;
 
