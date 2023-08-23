@@ -17,6 +17,10 @@ pub enum Error {
         source: Option<env::VarError>,
         key: String,
     },
+    BadCounterFile {
+        source: Option<std::num::ParseIntError>,
+        contents: String,
+    },
 }
 
 impl StdError for Error {
@@ -32,6 +36,11 @@ impl StdError for Error {
                 None => None,
                 Some(e) => Some(e),
             },
+            BadCounterFile { source, .. } => match source {
+                // simplest way to get the types to coerce
+                None => None,
+                Some(e) => Some(e),
+            },
         }
     }
 }
@@ -41,6 +50,9 @@ impl fmt::Display for Error {
         match self {
             FileIOFailed { .. } => write!(f, "File IO failed."),
             MissingEnvVar { key, .. } => write!(f, "No env var named {}", key),
+            BadCounterFile { contents, .. } => {
+                write!(f, "Counter file is not a number. Contents: {}", contents)
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-/// module that defines the test capabilites
+//! module that defines the test capabilites
 use crate::capabilities::*;
 use crate::error::Error::*;
 use crate::error::Result;
@@ -9,29 +9,43 @@ use std::path::Path;
 // different tests can have different test capabilities- you can make as
 // many of these as you need to test different states (e.g. - db table with no data vs with data etc.)
 pub struct DefaultTest {
-    logs: Vec<String>,
-    counter_file: String,
+    pub logs: Vec<String>,
+    pub counter_file: String,
+}
+
+impl DefaultTest {
+    pub fn default() -> DefaultTest {
+        DefaultTest {
+            logs: vec![],
+            counter_file: "0".to_string(),
+        }
+    }
 }
 
 impl ReadFiles for DefaultTest {
-    fn read_file(&self, path: &Path) -> Result<String> {
-        Ok("I return the same thing every time".to_string())
+    fn read_file(&mut self, path: &Path) -> Result<String> {
+        let filename = path.file_name().unwrap().to_str().unwrap();
+        if filename == "count.txt" {
+            Ok(self.counter_file.clone())
+        } else {
+            Ok("Default file contents".to_string())
+        }
     }
 }
 
 impl WriteFiles for DefaultTest {
-    fn write_file(&mut self, path: &Path, content: &str) -> Result<()> {
+    fn write_file(&mut self, _: &Path, content: &str) -> Result<()> {
         self.counter_file = content.to_string();
         Ok(())
     }
 }
 
 impl Env for DefaultTest {
-    fn env(&self, key: &str) -> Result<String> {
+    fn env(&mut self, key: &str) -> Result<String> {
         if key == "READ_FILE" {
-            Ok("dummy_read_file_for_tests.txt".to_string())
-        } else if key == "WRITE_FILE" {
-            Ok("dummy_write_file_for_tests.txt".to_string())
+            Ok("read.txt".to_string())
+        } else if key == "COUNT_FILE" {
+            Ok("count.txt".to_string())
         } else {
             Err(MissingEnvVar {
                 source: None,
