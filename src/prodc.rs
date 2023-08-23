@@ -6,16 +6,18 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
 
+// contains any necessary application state
+// this is often application configurations like a global log level
 pub struct Prod {}
 
-impl FileRead for Prod {
-    fn read(&self, path: &Path) -> Result<String> {
+impl ReadFiles for Prod {
+    fn read_file(&self, path: &Path) -> Result<String> {
         std::fs::read_to_string(path).map_err(|e| FileIOFailed { source: Some(e) })
     }
 }
 
-impl FileWrite for Prod {
-    fn write(&self, path: &Path, content: &str) -> Result<()> {
+impl WriteFiles for Prod {
+    fn write_file(&self, path: &Path, content: &str) -> Result<()> {
         let mut file = File::create(path).map_err(|e| FileIOFailed { source: Some(e) })?;
         file.write_all(content.as_bytes())
             .map_err(|e| FileIOFailed { source: Some(e) })?;
@@ -32,12 +34,9 @@ impl Env for Prod {
     }
 }
 
-impl Print for Prod {
-    fn print(&self, s: &str) {
-        print!("{}", s)
-    }
-
-    fn println(&self, s: &str) {
+impl Logging for Prod {
+    // you would use a real logging library here
+    fn log(&self, s: &str) {
         println!("{}", s)
     }
 }

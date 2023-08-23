@@ -2,20 +2,24 @@
 use crate::error::Result;
 use std::path::Path;
 
-pub trait FileRead {
-    fn read(&self, path: &Path) -> Result<String>;
+pub trait ReadFiles {
+    fn read_file(&self, path: &Path) -> Result<String>;
 }
 
-pub trait FileWrite {
-    fn write(&self, path: &Path, content: &str) -> Result<()>;
+pub trait WriteFiles {
+    fn write_file(&self, path: &Path, content: &str) -> Result<()>;
 }
 
 pub trait Env {
     fn env(&self, key: &str) -> Result<String>;
 }
 
-// more commonly a logging capability
-pub trait Print {
-    fn print(&self, s: &str);
-    fn println(&self, s: &str);
+pub trait Logging {
+    fn log(&self, s: &str);
 }
+
+// Other common capabilities to add here for your program:
+// - reading system time
+// - random number generation
+// - database interactions (e.g. - `Database` or `QueryDB` and `InsertDB` )
+// - connecting to individual APIs (e.g. - `GetWeather` `Discord` )
