@@ -26,22 +26,8 @@ pub fn update_counter<W: ReadFiles + WriteFiles>(world: &mut W, counter_path: &P
     let contents: String = world.read_file(counter_path)?;
     let count = contents.parse::<usize>().map_err(|e| BadCounterFile {
         source: Some(e),
-        contents: contents,
+        contents,
     })?;
     world.write_file(counter_path, &format!("{}", count + 1))?;
     Ok(())
 }
-
-// #[cfg(test)]
-// mod tests {
-//     mod testc;
-//     use testc::DefaultTest;
-
-//     #[test]
-//     fn boop() {
-//         let mut world = DefaultTest::default();
-//         super::run(&mut world);
-
-//         assert_eq!(world.logs, vec!["one", "two"])
-//     }
-// }

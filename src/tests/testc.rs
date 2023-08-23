@@ -4,10 +4,11 @@ use crate::error::Error::*;
 use crate::error::Result;
 use std::path::Path;
 
-// contains any necessary test state
+// contains any necessary test state.
 // this is often different caches for state to replace the outside world.
 // different tests can have different test capabilities- you can make as
-// many of these as you need to test different states (e.g. - db table with no data vs with data etc.)
+// many of these as you need to test different states (e.g. - db table
+// with no data vs with data, an API that responds with a rate limit etc.)
 pub struct DefaultTest {
     pub logs: Vec<String>,
     pub counter_file: String,
